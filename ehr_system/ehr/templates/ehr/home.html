@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EHR System</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Electronic Health Record System</h1>
+
+    <h2>Menu</h2>
+    <p class="message">Home page visits in this session: {{ visit_count }}</p>
+    <p class="message">Last opened section: {{ request.session.last_section|default:"None" }}</p>
+
+    <div class="dashboard">
+        <div class="summary-box">
+            <h3>Patients</h3>
+            <p>{{ patient_count }}</p>
+        </div>
+        <div class="summary-box">
+            <h3>Hospitals</h3>
+            <p>{{ hospital_count }}</p>
+        </div>
+        <div class="summary-box">
+            <h3>Doctors</h3>
+            <p>{{ doctor_count }}</p>
+        </div>
+        <div class="summary-box">
+            <h3>Registrations</h3>
+            <p>{{ registration_count }}</p>
+        </div>
+    </div>
+
+    <ul class="menu">
+        <li><a href="{% url 'patient_list' %}">Manage Patients</a></li>
+        <li><a href="{% url 'hospital_list' %}">Manage Hospitals</a></li>
+        <li><a href="{% url 'doctor_list' %}">Manage Doctors</a></li>
+        <li><a href="{% url 'registration_list' %}">Manage Registrations</a></li>
+    </ul>
+
+    <p><a href="{% url 'clear_session' %}">Clear Session Data</a></p>
+    <p><a href="/api/">Open API Root</a></p>
+</div>
+</body>
+</html>

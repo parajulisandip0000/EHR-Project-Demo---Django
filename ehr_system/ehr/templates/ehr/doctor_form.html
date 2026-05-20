@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor Form</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Doctor Form</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+    <a class="back-link" href="{% url 'doctor_list' %}">Back to Doctor List</a>
+</div>
+</body>
+</html>

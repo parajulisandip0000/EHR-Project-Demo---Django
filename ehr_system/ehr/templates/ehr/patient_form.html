@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Form</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Patient Form</h1>
+
+    {% if registration_count %}
+        <p class="message">This patient has {{ registration_count }} registration record(s).</p>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+    <a class="back-link" href="{% url 'patient_list' %}">Back to Patient List</a>
+</div>
+</body>
+</html>

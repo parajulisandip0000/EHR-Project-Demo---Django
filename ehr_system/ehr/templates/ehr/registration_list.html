@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Records</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Registration Records</h1>
+
+    <a class="top-link button" href="{% url 'registration_create' %}">Add New Registration</a>
+    <br><br>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Patient</th>
+            <th>Hospital</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Symptoms</th>
+            <th>Diagnosis</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for registration in registrations %}
+        <tr>
+            <td>{{ registration.patient.patient_name }}</td>
+            <td>{{ registration.hospital.hospital_name }}</td>
+            <td>{{ registration.doctor.doctor_name }}</td>
+            <td>{{ registration.registration_date }}</td>
+            <td>{{ registration.symptoms }}</td>
+            <td>{{ registration.diagnosis|default:"Pending" }}</td>
+            <td class="actions">
+                <a href="{% url 'registration_update' registration.id %}">Edit</a> |
+                <a href="{% url 'registration_delete' registration.id %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7">No registration records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hospital Records</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Hospital Records</h1>
+
+    <a class="top-link button" href="{% url 'hospital_create' %}">Add New Hospital</a>
+    <br><br>
+
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Established Date</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for hospital in hospitals %}
+        <tr>
+            <td>{{ hospital.hospital_name }}</td>
+            <td>{{ hospital.address }}</td>
+            <td>{{ hospital.phone }}</td>
+            <td>{{ hospital.email }}</td>
+            <td>{{ hospital.established_date }}</td>
+            <td class="actions">
+                <a href="{% url 'hospital_update' hospital.id %}">Edit</a> |
+                <a href="{% url 'hospital_delete' hospital.id %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No hospital records found.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a class="back-link" href="{% url 'home' %}">Back to Home</a>
+</div>
+</body>
+</html>

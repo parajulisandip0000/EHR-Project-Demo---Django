@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Hospital</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h1>Delete Hospital</h1>
+
+    <p>Are you sure you want to delete {{ hospital.hospital_name }}?</p>
+
+    <form method="POST">
+        {% csrf_token %}
+        <button class="danger" type="submit">Yes, Delete</button>
+    </form>
+
+    <br>
+    <a class="back-link" href="{% url 'hospital_list' %}">Cancel</a>
+</div>
+</body>
+</html>
