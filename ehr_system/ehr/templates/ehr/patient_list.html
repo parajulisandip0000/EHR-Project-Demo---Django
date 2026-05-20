@@ -22,9 +22,11 @@
         <tr>
             <th>Name</th>
             <th>Age</th>
+            <th>Category</th>
             <th>Gender</th>
             <th>Phone</th>
             <th>Blood Group</th>
+            <th>Registrations</th>
             <th>Actions</th>
         </tr>
 
@@ -32,9 +34,13 @@
         <tr>
             <td>{{ patient.patient_name }}</td>
             <td>{{ patient.age }}</td>
+            <td>
+                <span class="badge">{{ patient.category }}</span>
+            </td>
             <td>{{ patient.gender }}</td>
             <td>{{ patient.phone }}</td>
             <td>{{ patient.blood_group }}</td>
+            <td>{{ patient.registration_total }}</td>
             <td class="actions">
                 <a href="{% url 'patient_update' patient.id %}">Edit</a> |
                 <a href="{% url 'patient_delete' patient.id %}">Delete</a>
@@ -42,7 +48,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6">No patient records found.</td>
+            <td colspan="8">No patient records found.</td>
         </tr>
         {% endfor %}
     </table>

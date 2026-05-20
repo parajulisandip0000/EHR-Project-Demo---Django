@@ -3,8 +3,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Patient, Hospital, Doctor, Registration
 from .forms import PatientForm, HospitalForm, DoctorForm, RegistrationForm
 from .services import (
+    create_registration,
     doctor_limit,
     emergency_case,
+    get_doctors_for_hospital,
     get_patient_registration_count,
     patient_category,
 )
@@ -24,6 +26,9 @@ def home(request):
 
 def patient_list(request):
     patients = Patient.objects.all()
+    for patient in patients:
+        patient.category = patient_category(patient.age)
+        patient.registration_total = get_patient_registration_count(patient)
     return render(request, 'ehr/patient_list.html', {'patients': patients})
 
 
@@ -75,6 +80,8 @@ def patient_delete(request, id):
 
 def hospital_list(request):
     hospitals = Hospital.objects.all()
+    for hospital in hospitals:
+        hospital.doctor_total = get_doctors_for_hospital(hospital).count()
     return render(request, 'ehr/hospital_list.html', {'hospitals': hospitals})
 
 
@@ -118,6 +125,9 @@ def hospital_delete(request, id):
 
 def doctor_list(request):
     doctors = Doctor.objects.select_related('hospital')
+    for doctor in doctors:
+        doctor.registration_total = Registration.objects.filter(doctor=doctor).count()
+        doctor.available = doctor_limit(doctor)
     return render(request, 'ehr/doctor_list.html', {'doctors': doctors})
 
 
@@ -161,6 +171,12 @@ def doctor_delete(request, id):
 
 def registration_list(request):
     registrations = Registration.objects.select_related('patient', 'hospital', 'doctor')
+    for registration in registrations:
+        registration.patient_category = patient_category(registration.patient.age)
+        registration.is_emergency = emergency_case(registration.symptoms)
+        registration.doctor_registration_total = Registration.objects.filter(
+            doctor=registration.doctor
+        ).count()
     return render(request, 'ehr/registration_list.html', {'registrations': registrations})
 
 
@@ -180,7 +196,7 @@ def registration_create(request):
                 messages.error(request, 'Doctor limit exceeded')
                 return redirect('registration_create')
 
-            registration.save()
+            create_registration(form)
             return redirect('registration_list')
     else:
         form = RegistrationForm()

@@ -144,6 +144,26 @@ textarea {
     padding: 10px 12px;
 }
 
+.badge {
+    display: inline-block;
+    border-radius: 999px;
+    background: #e9f2f8;
+    color: #123047;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 9px;
+}
+
+.success {
+    background: #e7f6ec;
+    color: #146c2e;
+}
+
+.danger-badge {
+    background: #fdecec;
+    color: #b42318;
+}
+
 .actions {
     white-space: nowrap;
 }

@@ -19,6 +19,7 @@
             <th>Phone</th>
             <th>Email</th>
             <th>Established Date</th>
+            <th>Doctors</th>
             <th>Actions</th>
         </tr>
 
@@ -29,6 +30,7 @@
             <td>{{ hospital.phone }}</td>
             <td>{{ hospital.email }}</td>
             <td>{{ hospital.established_date }}</td>
+            <td>{{ hospital.doctor_total }}</td>
             <td class="actions">
                 <a href="{% url 'hospital_update' hospital.id %}">Edit</a> |
                 <a href="{% url 'hospital_delete' hospital.id %}">Delete</a>
@@ -36,7 +38,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="6">No hospital records found.</td>
+            <td colspan="7">No hospital records found.</td>
         </tr>
         {% endfor %}
     </table>

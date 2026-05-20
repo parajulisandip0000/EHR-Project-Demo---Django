@@ -21,10 +21,13 @@
     <table border="1" cellpadding="10">
         <tr>
             <th>Patient</th>
+            <th>Patient Category</th>
             <th>Hospital</th>
             <th>Doctor</th>
+            <th>Doctor Load</th>
             <th>Date</th>
             <th>Symptoms</th>
+            <th>Emergency</th>
             <th>Diagnosis</th>
             <th>Actions</th>
         </tr>
@@ -32,10 +35,19 @@
         {% for registration in registrations %}
         <tr>
             <td>{{ registration.patient.patient_name }}</td>
+            <td><span class="badge">{{ registration.patient_category }}</span></td>
             <td>{{ registration.hospital.hospital_name }}</td>
             <td>{{ registration.doctor.doctor_name }}</td>
+            <td>{{ registration.doctor_registration_total }} / 20</td>
             <td>{{ registration.registration_date }}</td>
             <td>{{ registration.symptoms }}</td>
+            <td>
+                {% if registration.is_emergency %}
+                    <span class="badge danger-badge">Emergency Case</span>
+                {% else %}
+                    <span class="badge success">Normal</span>
+                {% endif %}
+            </td>
             <td>{{ registration.diagnosis|default:"Pending" }}</td>
             <td class="actions">
                 <a href="{% url 'registration_update' registration.id %}">Edit</a> |
@@ -44,7 +56,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="7">No registration records found.</td>
+            <td colspan="10">No registration records found.</td>
         </tr>
         {% endfor %}
     </table>
