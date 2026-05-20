@@ -2,6 +2,13 @@ from django import forms
 from .models import Patient, Hospital, Doctor, Registration
 
 
+def validate_phone_number(phone):
+    allowed_characters = set('0123456789+- ')
+    if phone and any(character not in allowed_characters for character in phone):
+        raise forms.ValidationError('Phone number can contain digits, spaces, +, and - only.')
+    return phone
+
+
 class PatientForm(forms.ModelForm):
     class Meta:
         model = Patient
@@ -15,9 +22,7 @@ class PatientForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        if phone and not phone.isdigit():
-            raise forms.ValidationError('Phone number should contain digits only.')
-        return phone
+        return validate_phone_number(phone)
 
 
 class HospitalForm(forms.ModelForm):
@@ -30,9 +35,7 @@ class HospitalForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        if phone and not phone.isdigit():
-            raise forms.ValidationError('Phone number should contain digits only.')
-        return phone
+        return validate_phone_number(phone)
 
 
 class DoctorForm(forms.ModelForm):
@@ -42,9 +45,7 @@ class DoctorForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        if phone and not phone.isdigit():
-            raise forms.ValidationError('Phone number should contain digits only.')
-        return phone
+        return validate_phone_number(phone)
 
 
 class RegistrationForm(forms.ModelForm):

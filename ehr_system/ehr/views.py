@@ -1,36 +1,22 @@
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Patient, Hospital, Doctor, Registration
 from .forms import PatientForm, HospitalForm, DoctorForm, RegistrationForm
-from .services import create_registration, get_patient_registration_count
+from .services import (
+    doctor_limit,
+    emergency_case,
+    get_patient_registration_count,
+    patient_category,
+)
 
 
 def home(request):
-    visit_count = request.session.get('visit_count', 0) + 1
-    request.session['visit_count'] = visit_count
-
-    counts = {
-        'patient_count': Patient.objects.count(),
-        'hospital_count': Hospital.objects.count(),
-        'doctor_count': Doctor.objects.count(),
-        'registration_count': Registration.objects.count(),
-    }
-
-    context = {
-        'visit_count': visit_count,
-        **counts,
-    }
-    return render(request, 'ehr/home.html', context)
-
-
-def clear_session(request):
-    request.session.flush()
-    return redirect('home')
+    return render(request, 'ehr/home.html')
 
 
 # Patient CRUD
 
 def patient_list(request):
-    request.session['last_section'] = 'Patients'
     patients = Patient.objects.all()
     return render(request, 'ehr/patient_list.html', {'patients': patients})
 
@@ -39,7 +25,11 @@ def patient_create(request):
     if request.method == 'POST':
         form = PatientForm(request.POST)
         if form.is_valid():
-            form.save()
+            patient = form.save(commit=False)
+            category = patient_category(patient.age)
+            print(category)
+            patient.save()
+            messages.info(request, f'Patient category: {category}')
             return redirect('patient_list')
     else:
         form = PatientForm()
@@ -72,13 +62,12 @@ def patient_delete(request, id):
         patient.delete()
         return redirect('patient_list')
 
-    return render(request, 'ehr/patient_confirm_delete.html', {'patient': patient})
+    return render(request, 'ehr/patient_delete.html', {'patient': patient})
 
 
 # Hospital CRUD
 
 def hospital_list(request):
-    request.session['last_section'] = 'Hospitals'
     hospitals = Hospital.objects.all()
     return render(request, 'ehr/hospital_list.html', {'hospitals': hospitals})
 
@@ -116,13 +105,12 @@ def hospital_delete(request, id):
         hospital.delete()
         return redirect('hospital_list')
 
-    return render(request, 'ehr/hospital_confirm_delete.html', {'hospital': hospital})
+    return render(request, 'ehr/hospital_delete.html', {'hospital': hospital})
 
 
 # Doctor CRUD
 
 def doctor_list(request):
-    request.session['last_section'] = 'Doctors'
     doctors = Doctor.objects.select_related('hospital')
     return render(request, 'ehr/doctor_list.html', {'doctors': doctors})
 
@@ -160,13 +148,12 @@ def doctor_delete(request, id):
         doctor.delete()
         return redirect('doctor_list')
 
-    return render(request, 'ehr/doctor_confirm_delete.html', {'doctor': doctor})
+    return render(request, 'ehr/doctor_delete.html', {'doctor': doctor})
 
 
 # Registration CRUD
 
 def registration_list(request):
-    request.session['last_section'] = 'Registrations'
     registrations = Registration.objects.select_related('patient', 'hospital', 'doctor')
     return render(request, 'ehr/registration_list.html', {'registrations': registrations})
 
@@ -175,7 +162,19 @@ def registration_create(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            create_registration(form)
+            registration = form.save(commit=False)
+
+            emergency = emergency_case(registration.symptoms)
+            if emergency:
+                print("Emergency Patient")
+                messages.warning(request, 'Emergency Patient')
+
+            if not doctor_limit(registration.doctor):
+                print("Doctor limit exceeded")
+                messages.error(request, 'Doctor limit exceeded')
+                return redirect('registration_create')
+
+            registration.save()
             return redirect('registration_list')
     else:
         form = RegistrationForm()
@@ -204,4 +203,4 @@ def registration_delete(request, id):
         registration.delete()
         return redirect('registration_list')
 
-    return render(request, 'ehr/registration_confirm_delete.html', {'registration': registration})
+    return render(request, 'ehr/registration_delete.html', {'registration': registration})

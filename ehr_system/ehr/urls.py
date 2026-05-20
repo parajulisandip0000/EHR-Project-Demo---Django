@@ -1,17 +1,8 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from django.urls import path
 from . import views
-from .api_views import PatientViewSet, HospitalViewSet, DoctorViewSet, RegistrationViewSet
-
-router = DefaultRouter()
-router.register('patients', PatientViewSet)
-router.register('hospitals', HospitalViewSet)
-router.register('doctors', DoctorViewSet)
-router.register('registrations', RegistrationViewSet)
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('clear-session/', views.clear_session, name='clear_session'),
 
     path('patients/', views.patient_list, name='patient_list'),
     path('patients/create/', views.patient_create, name='patient_create'),
@@ -32,6 +23,4 @@ urlpatterns = [
     path('registrations/create/', views.registration_create, name='registration_create'),
     path('registrations/update/<int:id>/', views.registration_update, name='registration_update'),
     path('registrations/delete/<int:id>/', views.registration_delete, name='registration_delete'),
-
-    path('api/', include(router.urls)),
 ]

@@ -2,12 +2,16 @@
 <html>
 <head>
     <title>Registration Records</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'ehr/style.css' %}">
 </head>
 <body>
 <div class="container">
     <h1>Registration Records</h1>
+
+    {% if messages %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 
     <a class="top-link button" href="{% url 'registration_create' %}">Add New Registration</a>
     <br><br>
