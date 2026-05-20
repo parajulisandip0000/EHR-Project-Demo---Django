@@ -11,7 +11,13 @@ from .services import (
 
 
 def home(request):
-    return render(request, 'ehr/home.html')
+    context = {
+        'patient_count': Patient.objects.count(),
+        'hospital_count': Hospital.objects.count(),
+        'doctor_count': Doctor.objects.count(),
+        'registration_count': Registration.objects.count(),
+    }
+    return render(request, 'ehr/home.html', context)
 
 
 # Patient CRUD

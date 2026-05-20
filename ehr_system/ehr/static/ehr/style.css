@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #f4f7fb;
+    color: #1f2937;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+    width: min(1100px, calc(100% - 32px));
+    margin: 32px auto;
+    background: #ffffff;
+    border: 1px solid #d7dee8;
+    border-radius: 8px;
+    padding: 24px;
+}
+
+h1 {
+    margin: 0 0 20px;
+    color: #123047;
+}
+
+.count-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.count-card {
+    border: 1px solid #d7dee8;
+    border-left: 5px solid #1876a6;
+    border-radius: 8px;
+    padding: 16px;
+    background: #f9fbfd;
+}
+
+.count-card span {
+    display: block;
+    color: #526173;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.count-card strong {
+    color: #123047;
+    font-size: 30px;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+a,
+button {
+    font: inherit;
+}
+
+a {
+    color: #0f6f9f;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.menu a,
+.button,
+button {
+    display: inline-block;
+    border: 0;
+    border-radius: 6px;
+    background: #1876a6;
+    color: #ffffff;
+    padding: 10px 14px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.menu a {
+    width: 100%;
+}
+
+.danger {
+    background: #b42318;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+}
+
+th {
+    background: #e9f2f8;
+    color: #123047;
+    text-align: left;
+}
+
+th,
+td {
+    border: 1px solid #d7dee8;
+    padding: 10px;
+    vertical-align: top;
+}
+
+form p {
+    margin: 0 0 14px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    border: 1px solid #b8c2cc;
+    border-radius: 6px;
+    padding: 9px 10px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+.message {
+    border-left: 5px solid #1876a6;
+    background: #e9f2f8;
+    padding: 10px 12px;
+}
+
+.actions {
+    white-space: nowrap;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+@media (max-width: 760px) {
+    .count-grid,
+    .menu {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        margin: 16px auto;
+        padding: 16px;
+    }
+}
